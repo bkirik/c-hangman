@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -8,8 +8,6 @@ namespace HangMan
     {
         static void Main(string[] args)
         {
-            //ON PROCESS
-
             //Create word list
             string[] words = { "ALMANYA", "TÜRKİYE", "FİNLANDİYA", "SAMOA", "SOMALİ", "AVUSTRALYA", "AVUSTURYA", "LİHTENŞTAYN" };
 
@@ -22,7 +20,7 @@ namespace HangMan
 
             //Convert it to a list so we can check if the game is over
             List<string> pickedWordList = new List<string>();
-            for(int i = 0; i < pickedWord.Length; i++)
+            for (int i = 0; i < pickedWord.Length; i++)
             {
                 pickedWordList.Add(pickedWord[i] + " ");
             }
@@ -37,15 +35,20 @@ namespace HangMan
             {
                 dashes.Add("__ ");
             }
-            foreach(string i in dashes)
+            foreach (string i in dashes)
             {
                 Console.Write(i);
             }
 
             bool gameOver = false;
             //Get an input from the user
+            List<string> guessedOnes = new List<string>();
             Console.Write("\nInput a guess or a letter: ");
             string input = Console.ReadLine();
+            guessedOnes.Add(input);
+
+            //Health system
+            int counter = 0;
             while (!gameOver)
             {
                 //Check if the given input is a character or a word
@@ -71,24 +74,33 @@ namespace HangMan
                         }
                         //Convert dashes to string
                         string dashesStr = String.Join("", dashes);
-                        if(dashesStr != pickedWordListString)
+                        if (dashesStr != pickedWordListString)
                         {
                             Console.WriteLine(dashesStr);
                             Console.Write("Input a guess or a letter: ");
+                            guessedOnes.Add(input);
                             input = Console.ReadLine();
+
                         }
                         else
                         {
                             Console.WriteLine("CONGRATS! YOU WIN THE WORD WAS: " + pickedWord);
                             gameOver = true;
                         }
-                        
+
                     }
                     else
                     {
                         Console.WriteLine("HARF BU DEĞİL!");
+                        Console.WriteLine("KALAN HAK: " + (8 - counter));
                         Console.Write("Input a guess or a letter: ");
                         input = Console.ReadLine();
+                        counter++;
+                        if (counter == 8)
+                        {
+                            gameOver = true;
+                            Console.WriteLine("KAYBETTİNİZ KELİME: " + pickedWord);
+                        }
                     }
 
                 }
@@ -97,8 +109,16 @@ namespace HangMan
                     if (input != pickedWord)
                     {
                         Console.WriteLine("KELİME BU DEĞİL! ");
+                        Console.WriteLine("KALAN HAK: " + (8 - counter));
+                        counter++;
                         Console.Write("Input a guess or a letter: ");
                         input = Console.ReadLine();
+                        counter++;
+                        if (counter == 8)
+                        {
+                            gameOver = true;
+                            Console.WriteLine("KAYBETTİNİZ KELİME: " + pickedWord);
+                        }
                     }
                     else
                     {
